@@ -32,10 +32,14 @@ class CompositeEncodingAlgorithm implements EncodingAlgorithm
      */
     public function encode(string $text): string
     {
-        /**
-         * @todo: Implement it
-         */
+        if (empty($this->algorithms)) {
+            throw new \Exception('Algorithms list is empty');
+        }
 
-        return '';
+        foreach ($this->algorithms as $algorithm) {
+            $text = $algorithm->encode($text);
+        }
+
+        return $text;
     }
 }

@@ -13,7 +13,8 @@ class SubstitutionEncodingAlgorithm implements EncodingAlgorithm
      */
     public function __construct(array $substitutions)
     {
-        $this->substitutions = [];
+        $this->substitutions = $substitutions;
+
     }
 
     /**
@@ -25,10 +26,29 @@ class SubstitutionEncodingAlgorithm implements EncodingAlgorithm
      */
     public function encode(string $text): string
     {
-        /**
-         * @todo: Implement it
-         */
+        $newString    = '';
 
-        return '';
+        $splittedText = str_split($text);
+
+        foreach ($splittedText as $char) {
+            $wasChanged = false;
+            foreach ($this->substitutions as $rule) {
+                $chars = str_split($rule);
+                if ($char == $chars[0]) {
+                    $newString  .= $chars[1];
+                    $wasChanged = true;
+                } else {
+                    if ($char == $chars[1]) {
+                        $newString  .= $chars[0];
+                        $wasChanged = true;
+                    }
+                }
+            }
+            if (!$wasChanged) {
+                $newString .= $char;
+            }
+        }
+
+        return $newString;
     }
 }

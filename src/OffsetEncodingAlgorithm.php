@@ -27,10 +27,21 @@ class OffsetEncodingAlgorithm implements EncodingAlgorithm
      */
     public function encode(string $text): string
     {
-        /**
-         * @todo: Implement it
-         */
+        $out = [];
+        $characters = mb_str_split(self::CHARACTERS);
+        $charactersLength = count($characters);
 
-        return '';
+        foreach (mb_str_split($text) as $char) {
+           if (false === in_array($char, $characters, true)){
+               $out[] = $char;
+               continue;
+           }
+
+           $charCode = (ord($char) + $this->offset) % $charactersLength;
+
+           $out[] = chr($charCode);
+        }
+
+        return implode($out);
     }
 }
